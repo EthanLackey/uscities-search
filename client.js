@@ -54,24 +54,32 @@ function displaySearch(data) {
         console.log('Error in getting response element')
         return;
     }
-    responsesElm.innerHTML = json2htmltable(data);
+    responsesElm.innerHTML = json2htmllist(data);
 }
 
 function data_sanitize(v) {
     return DOMPurify.sanitize(typeof v == 'string' ? v : '');
 }
 
-function json2htmltable(data) {
+function json2htmllist(data) {
     if (!Array.isArray(data) || data.length === 0) return "No cities found";
-        var rows = data.map(function (c) {
-        return "<tr><td>" + data_sanitize(c.city) + "</td><td>" + data_sanitize(c.state) + "</td><td>" + data_sanitize(c.zips) + "</td></tr>";
+        var items = data.map(function (c) {
+        return '<li class="city-card"><strong>' + data_sanitize(c.city) + '</strong>, ' + data_sanitize(c.state_name) + '<span class = "zips">' + data_sanitize(c.zips) + '</span></li>';
     }).join('');
-    return "<table><tr><th>City</th><th>State</th><th>Zip Codes</th></tr>" + rows + "</table>";   
+    return '<ul class="city-list">' + items + '</ul>';   
 }
 
+
+var debounceTimer = null;
 searchInput.addEventListener('keyup', function(event) {
-    search();
     if (event.key === 'Enter') {
+        clearTimeout(debounceTimer);
+        search();
         searchInput.value = '';
+        return;
     }
+    clearTimeout(debounceTimer);
+    var query = searchInput.value.trim();
+    if (query.length <2) return;
+    debounceTimer = setTimeout(search, 300);
 });
