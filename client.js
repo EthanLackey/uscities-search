@@ -64,7 +64,7 @@ function data_sanitize(v) {
 function json2htmllist(data) {
     if (!Array.isArray(data) || data.length === 0) return "No cities found";
         var items = data.map(function (c) {
-        return '<li class="city-card"><strong>' + data_sanitize(c.city) + '</strong>, ' + data_sanitize(c.state_name) + '<span class = "zips">' + data_sanitize(c.zips) + '</span></li>';
+        return '<li class="city-card"><strong>' + data_sanitize(c.city) + '</strong>, ' + data_sanitize(c.state_name) + '<span class = "zips"> ' + data_sanitize(c.zips) + '</span></li>';
     }).join('');
     return '<ul class="city-list">' + items + '</ul>';   
 }
